@@ -1,0 +1,6 @@
+server {
+    listen 8080;
+    location / {
+        proxy_pass http://s3.eu-central-1.amazonaws.com/mjmax-bucket/index.html;
+    }
+}

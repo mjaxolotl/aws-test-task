@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  become: yes
+  vars:
+    nginx_path: /etc/nginx/conf.d
+  tasks:
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+    - name: Autostart nginx
+      service:
+         name: nginx
+         enabled: yes
+    - name: Delete conf.d
+      file:
+        state: absent
+        path: "{{ nginx_path }}"
+    - name: Create conf.d again
+      file:
+        state: directory
+        path: "{{ nginx_path }}"
+        mode: 0755
+    - name: Copy a config file to conf.d
+      template:
+        src: templates/aws.j2
+        dest: "{{ nginx_path }}/aws.conf"
+        mode: 0644
+      notify:
+      - restart nginx
+  handlers:
+     - name: restart nginx
+       service:
+         name: nginx
+         state: restarted
