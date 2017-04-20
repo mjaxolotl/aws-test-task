@@ -8,6 +8,10 @@
       yum:
         name: nginx
         state: present
+    -name: Install libselinux-python
+      yum:
+        name: libselinux-python
+        state: present
     - name: Autostart nginx
       service:
          name: nginx
